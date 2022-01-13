@@ -1,12 +1,12 @@
 import pygame as pg
 import random
 
-class Square():
-    """A class to represent the grid squares within the maze"""
+class Cell():
+    """A class to represent the grid cells within the maze"""
 
     def __init__(self, settings, row, col):
-        """Initialize the square's settings"""
-        self.size = settings.squareSize
+        """Initialize the cell's settings"""
+        self.size = settings.cellSize
         self.row = row
         self.col = col
         self.visited = False
@@ -14,7 +14,7 @@ class Square():
                         'bottom' : True , 
                         'left' : True , 
                         'right' : True}
-        # self.fillColor = settings.squareFillUnvisited
+        # self.fillColor = settings.cellFillUnvisited
         # self.borderColors = {'top': settings.borderColor , 
         #                 'bottom' : settings.borderColor , 
         #                 'left' : settings.borderColor , 
@@ -22,7 +22,7 @@ class Square():
         self.rect = pg.Rect(self.col * self.size, self.row * self.size, self.size, self.size)
 
     # def draw(self, screen):
-    #     """Draws the square to the screen"""
+    #     """Draws the cell to the screen"""
     #     rect = self.rect
     #     borderColors = self.borderColors
     #     borders = self.borders
@@ -43,7 +43,7 @@ class Square():
     #     if borders['right']:
     #         pg.draw.line(screen, borderColors['right'], topRight, bottomRight, borderThickness)
 
-    def visit(self, settings):
-        """Updates square settings once visited"""
-        self.visited = True
-        self.fillColor = settings.squareFillVisited
+    # def visit(self, settings):
+    #     """Updates cell settings once visited"""
+    #     self.visited = True
+    #     self.fillColor = settings.cellFillVisited

@@ -4,16 +4,16 @@ class Settings():
     def __init__(self):
         """Initialize the game's static settings"""
         # Screen settings
-        self.squareSize = 20
-        self.numRows = 30
-        self.numCols = 30
-        self.screenWidth = self.squareSize * self.numCols
-        self.screenHeight = self.squareSize * self.numRows
+        self.cellSize = 30
+        self.numRows = 20
+        self.numCols = 20
+        self.screenWidth = self.cellSize * self.numCols
+        self.screenHeight = self.cellSize * self.numRows
         self.bgColor = (0, 0, 0)
         
-        # Square settings
-        self.squareFillCurrent = (201, 60, 129)
-        self.squareFillUnvisited = (225, 225, 225)
-        self.squareFillVisited = (80, 217, 167)
+        # Cell settings
+        self.cellFillCurrent = (222, 84, 30 )
+        self.cellFillUnvisited = (207, 192, 189)
+        self.cellFillVisited = (97, 201, 168)
         self.borderColor = (60, 60, 60)
         

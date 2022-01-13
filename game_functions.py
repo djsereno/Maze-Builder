@@ -1,5 +1,7 @@
 # Import standard modules.
 import sys
+import random as rand
+
  
 # Import non-standard modules.
 import pygame as pg
@@ -18,10 +20,56 @@ def update(dt, settings, grid):
             sys.exit() # Not including this line crashes the script on Windows. Possibly
             # on other operating systems too, but I don't know for sure.
 
-    (x, y) = pg.mouse.get_pos()
-    row, col = int(y / settings.squareSize), int(x / settings.squareSize)
-    index = getIndex(settings, row, col)
-    grid[index].visit(settings)
+    # While the stack is not empty
+    if grid['stack']:
+        # Pop a cell from the stack and make it a current cell
+        grid['currentCell'] = grid['stack'].pop()
+        (row, col) = grid['currentCell']
+        numRows = settings.numRows
+        numCols = settings.numCols
+        index = getIndex(row, col, numRows, numCols)
+
+        options = []
+        up = getIndex(row - 1, col, numRows, numCols)
+        down = getIndex(row + 1, col, numRows, numCols)
+        left = getIndex(row, col - 1, numRows, numCols)
+        right = getIndex(row, col + 1, numRows, numCols)
+
+        if up and not grid['cells'][up].visited:
+            options.append(up)
+        if down and not grid['cells'][down].visited:
+            options.append(down)
+        if left and not grid['cells'][left].visited:
+            options.append(left)
+        if right and not grid['cells'][right].visited:
+            options.append(right)
+        
+        # If the current cell has any neighbours which have not been visited 
+        if len(options) >= 1:
+
+            # Push the current cell to the stack
+            grid['stack'].append(grid['currentCell'])
+            
+            # Choose one of the unvisited neighbours
+            newIndex = options[rand.randint(0, len(options) - 1)]
+
+            # Remove the wall between the current cell and the chosen cell
+            if newIndex == down:
+                grid['cells'][index].borders['bottom'] = False
+                grid['cells'][newIndex].borders['top'] = False
+            elif newIndex == up:
+                grid['cells'][index].borders['top'] = False
+                grid['cells'][newIndex].borders['bottom'] = False
+            elif newIndex == right:
+                grid['cells'][index].borders['right'] = False
+                grid['cells'][newIndex].borders['left'] = False
+            elif newIndex == left:
+                grid['cells'][index].borders['left'] = False
+                grid['cells'][newIndex].borders['right'] = False
+
+            # Mark the chosen cell as visited and push it to the stack
+            grid['cells'][newIndex].visited = True
+            grid['stack'].append(getCoordinates(grid, newIndex, numCols))
 
     
 def draw(screen, settings, grid):
@@ -29,13 +77,12 @@ def draw(screen, settings, grid):
     screen.fill(settings.bgColor) # Fill the screen with black.
   
     # Redraw screen here.
-    for square in grid:
-        # square.draw(screen)
+    for cell in grid['cells']:
+        # cell.draw(screen)
 
-
-        # """Draws the square to the screen"""
-        rect = square.rect
-        borders = square.borders
+        # """Draws the cell to the screen"""
+        rect = cell.rect
+        borders = cell.borders
         borderThickness = 2
         
         topLeft = (rect.left, rect.top)
@@ -43,12 +90,16 @@ def draw(screen, settings, grid):
         bottomLeft = (rect.left, rect.bottom)
         bottomRight = (rect.right, rect.bottom)
         
-        if square.visited:
-            fill = settings.squareFillVisited
+        # Draw cell
+        if (cell.row, cell.col) == grid['currentCell']:
+            fill = settings.cellFillCurrent
+        elif cell.visited:
+            fill = settings.cellFillVisited
         else:
-            fill = settings.squareFillUnvisited
+            fill = settings.cellFillUnvisited
         pg.draw.rect(screen, fill, rect, 0)
 
+        # Draw borders
         if borders['top']:
             pg.draw.line(screen, settings.borderColor, topLeft, topRight, borderThickness)
         if borders['bottom']:
@@ -61,6 +112,14 @@ def draw(screen, settings, grid):
     # Flip the display so that the things we drew actually show up.
     pg.display.flip()
 
-def getIndex(settings, row, col):
-    """Returns the index within the grid of the square at row, col"""
-    return row * settings.numCols + col
+def getIndex(row, col, numRows, numCols):
+    """Returns the index within the grid of the cell at row, col"""
+    if row < 0 or col < 0 or row >= numRows or col >= numCols: return False
+    return row * numCols + col
+
+def getCoordinates(grid, index, numCols):
+    """Returns the coordinates of a cell within the grid for a given index"""
+    if index < 0 or index >= len(grid['cells']): return False
+    row = int(index / numCols)
+    col = index % numCols
+    return (row, col)

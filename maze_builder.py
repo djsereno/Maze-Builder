@@ -5,11 +5,10 @@ import sys
 
 # Import non-standard modules.
 import pygame as pg
-from pygame.locals import *
-from square import Square
+from pygame.locals import * 
+from cell import Cell
 import game_functions as gf
 from settings import Settings
-
 
 def runPyGame():
     # Initialise PyGame.
@@ -27,16 +26,17 @@ def runPyGame():
     screen = pg.display.set_mode((width, height))
     pg.display.set_caption("Maze Builder")
 
-    # screen is the surface representing the window.
-    # PyGame surfaces can be thought of as screen sections that you can draw onto.
-    # You can also draw surfaces onto other surfaces, rotate surfaces, and transform surfaces.
-
     # Initialize grid
-    grid = []
+    grid = {}
+    grid['cells'] = []
     for row in range(settings.numRows):
         for col in range(settings.numCols):
-            square = Square(settings, row, col)
-            grid.append(square)
+            cell = Cell(settings, row, col)
+            grid['cells'].append(cell)
+    
+    # Choose the initial cell, mark it as visited and push it to the stack
+    grid['cells'][0].visited = True
+    grid['stack'] = [(0, 0)]
 
     # Main game loop.
     dt = 1/fps # dt is the time since last frame.
