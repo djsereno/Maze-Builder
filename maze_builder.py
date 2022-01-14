@@ -1,4 +1,6 @@
-# Maze Builder
+# ################# Maze Builder #################
+# Maze generator algorithm using iterative implementation and backtracking method.
+# See 'Iterative Implementation' at https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
 # Import standard modules.
 import sys

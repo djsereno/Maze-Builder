@@ -78,36 +78,64 @@ def draw(screen, settings, grid):
   
     # Redraw screen here.
     for cell in grid['cells']:
-        # cell.draw(screen)
 
         # """Draws the cell to the screen"""
         rect = cell.rect
         borders = cell.borders
-        borderThickness = 2
-        
-        topLeft = (rect.left, rect.top)
-        topRight = (rect.right, rect.top)
-        bottomLeft = (rect.left, rect.bottom)
-        bottomRight = (rect.right, rect.bottom)
+        borderThickness = settings.borderThickness
+        borderColor = settings.borderColor
         
         # Draw cell
         if (cell.row, cell.col) == grid['currentCell']:
             fill = settings.cellFillCurrent
+        elif (cell.row, cell.col) in grid['stack']:
+            fill = settings.cellFillStack
         elif cell.visited:
             fill = settings.cellFillVisited
         else:
             fill = settings.cellFillUnvisited
         pg.draw.rect(screen, fill, rect, 0)
 
+    ####################################################################
+    # For lines to look good, need to draw rects first
+    # then draw borders. Need to find a way to draw on 
+    # different 'layers'. Sprite groups maybe? Want to remove
+    # this second loop below
+    ####################################################################
+    for cell in grid['cells']:
+        rect = cell.rect
+        borders = cell.borders
+        borderThickness = settings.borderThickness
+        borderColor = settings.borderColor
+    ####################################################################
+
         # Draw borders
         if borders['top']:
-            pg.draw.line(screen, settings.borderColor, topLeft, topRight, borderThickness)
+            topLeft = (rect.left - int(borderThickness / 2) + 1, rect.top)
+            topRight = (rect.right + int(borderThickness / 2), rect.top)
+            pg.draw.line(screen, borderColor, topLeft, topRight, borderThickness)
+            # pg.draw.line(screen, (255, 255, 255), topLeft, topRight)
         if borders['bottom']:
-            pg.draw.line(screen, settings.borderColor, bottomLeft, bottomRight, borderThickness)
+            ####################################################################
+            # Not showing up at bottom edge of screen. Need to check coordinates
+            ####################################################################
+            bottomLeft = (rect.left - int(borderThickness / 2) + 1, rect.bottom)
+            bottomRight = (rect.right + int(borderThickness / 2), rect.bottom)
+            # pg.draw.line(screen, borderColor, bottomLeft, bottomRight, borderThickness)
+            pg.draw.line(screen, (255, 255, 255), bottomLeft, bottomRight)
         if borders['left']:
-            pg.draw.line(screen, settings.borderColor, topLeft, bottomLeft, borderThickness)
+            topLeft = (rect.left, rect.top - int(borderThickness / 2) + 1)
+            bottomLeft = (rect.left, rect.bottom + int(borderThickness / 2))
+            pg.draw.line(screen, borderColor, topLeft, bottomLeft, borderThickness)
+            # pg.draw.line(screen, (255, 255, 255), topLeft, bottomLeft)
         if borders['right']:
-            pg.draw.line(screen, settings.borderColor, topRight, bottomRight, borderThickness)
+            ####################################################################
+            # Not showing up at right edge of screen. Need to check coordinates
+            #################################################################### 
+            topRight = (rect.right, rect.top - int(borderThickness / 2) + 1)
+            bottomRight = (rect.right, rect.bottom + int(borderThickness / 2))
+            # pg.draw.line(screen, borderColor, topRight, bottomRight, borderThickness)
+            pg.draw.line(screen, (255, 255, 255), topRight, bottomRight)
   
     # Flip the display so that the things we drew actually show up.
     pg.display.flip()
