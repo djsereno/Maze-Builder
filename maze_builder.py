@@ -3,6 +3,11 @@
 # ==============
 # Maze generator algorithm using iterative implementation and backtracking method.
 # See 'Iterative Implementation' at https://en.wikipedia.org/wiki/Maze_generation_algorithm
+# ==============
+# Future updates or improvements:
+# - Keep track of longest path and display once complete
+# - Allow user to draw obstacles prior to maze generation
+# - Allow user to define an end point
 
 # Import standard modules.
 import sys
@@ -20,7 +25,7 @@ def runPyGame():
     pg.init()
 
     # Set up the clock. This will tick every frame and thus maintain a relatively constant framerate. Hopefully.
-    fps = 1.0
+    fps = 60.0
     fpsClock = pg.time.Clock()
 
     # Create settings
@@ -39,8 +44,7 @@ def runPyGame():
             grid.cells.append(cell)
     
     # Choose the initial cell, mark it as visited and push it to the stack
-    # grid.cells[0].visited = True
-    grid.stack.append((0, 0))
+    grid.stack.append(grid.cells[settings.startCell])
 
     # Main game loop.
     dt = 1/fps # dt is the time since last frame.
