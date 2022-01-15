@@ -1,5 +1,4 @@
 import pygame as pg
-import random
 
 class Cell():
     """A class to represent the grid cells within the maze"""

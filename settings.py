@@ -4,9 +4,9 @@ class Settings():
     def __init__(self):
         """Initialize the game's static settings"""
         # Grid settings
-        self.cellSize = 32
-        self.numRows = 10
-        self.numCols = 10
+        self.cellSize = 20
+        self.numRows = 60
+        self.numCols = 60
         
         # Cell settings
         self.cellFillCurrent = (222, 84, 30)
@@ -14,8 +14,8 @@ class Settings():
         self.cellFillUnvisited = (207, 192, 189)
         self.cellFillVisited = (35, 87, 137)
         self.borderColor = (60, 60, 60)
-        self.borderThickness = int(self.cellSize / 2)
-        # self.borderThickness = 4
+        # self.borderThickness = int(self.cellSize / 2)
+        self.borderThickness = 2
 
         # Screen settings
         self.screenWidth = self.cellSize * self.numCols

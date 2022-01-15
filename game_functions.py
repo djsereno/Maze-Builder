@@ -21,10 +21,10 @@ def update(dt, settings, grid):
             # on other operating systems too, but I don't know for sure.
 
     # While the stack is not empty
-    if grid['stack']:
+    if grid.stack:
         # Pop a cell from the stack and make it a current cell
-        grid['currentCell'] = grid['stack'].pop()
-        (row, col) = grid['currentCell']
+        grid.currentCell = grid.stack.pop()
+        (row, col) = grid.currentCell
         numRows = settings.numRows
         numCols = settings.numCols
         index = getIndex(row, col, numRows, numCols)
@@ -35,41 +35,41 @@ def update(dt, settings, grid):
         left = getIndex(row, col - 1, numRows, numCols)
         right = getIndex(row, col + 1, numRows, numCols)
 
-        if up and not grid['cells'][up].visited:
+        if up and not grid.cells[up].visited:
             options.append(up)
-        if down and not grid['cells'][down].visited:
+        if down and not grid.cells[down].visited:
             options.append(down)
-        if left and not grid['cells'][left].visited:
+        if left and not grid.cells[left].visited:
             options.append(left)
-        if right and not grid['cells'][right].visited:
+        if right and not grid.cells[right].visited:
             options.append(right)
         
         # If the current cell has any neighbours which have not been visited 
         if len(options) >= 1:
 
             # Push the current cell to the stack
-            grid['stack'].append(grid['currentCell'])
+            grid.stack.append(grid.currentCell)
             
             # Choose one of the unvisited neighbours
             newIndex = options[rand.randint(0, len(options) - 1)]
 
             # Remove the wall between the current cell and the chosen cell
             if newIndex == down:
-                grid['cells'][index].borders['bottom'] = False
-                grid['cells'][newIndex].borders['top'] = False
+                grid.cells[index].borders['bottom'] = False
+                grid.cells[newIndex].borders['top'] = False
             elif newIndex == up:
-                grid['cells'][index].borders['top'] = False
-                grid['cells'][newIndex].borders['bottom'] = False
+                grid.cells[index].borders['top'] = False
+                grid.cells[newIndex].borders['bottom'] = False
             elif newIndex == right:
-                grid['cells'][index].borders['right'] = False
-                grid['cells'][newIndex].borders['left'] = False
+                grid.cells[index].borders['right'] = False
+                grid.cells[newIndex].borders['left'] = False
             elif newIndex == left:
-                grid['cells'][index].borders['left'] = False
-                grid['cells'][newIndex].borders['right'] = False
+                grid.cells[index].borders['left'] = False
+                grid.cells[newIndex].borders['right'] = False
 
             # Mark the chosen cell as visited and push it to the stack
-            grid['cells'][newIndex].visited = True
-            grid['stack'].append(getCoordinates(grid, newIndex, numCols))
+            grid.cells[newIndex].visited = True
+            grid.stack.append(getCoordinates(grid, newIndex, numCols))
 
     
 def draw(screen, settings, grid):
@@ -77,7 +77,7 @@ def draw(screen, settings, grid):
     screen.fill(settings.bgColor) # Fill the screen with black.
   
     # Redraw screen here.
-    for cell in grid['cells']:
+    for cell in grid.cells:
 
         # """Draws the cell to the screen"""
         rect = cell.rect
@@ -86,9 +86,12 @@ def draw(screen, settings, grid):
         borderColor = settings.borderColor
         
         # Draw cell
-        if (cell.row, cell.col) == grid['currentCell']:
+        ################################################################
+        # Current cell is showing up as green before red. Need to dig into it
+        ################################################################
+        if (cell.row, cell.col) == grid.currentCell:
             fill = settings.cellFillCurrent
-        elif (cell.row, cell.col) in grid['stack']:
+        elif (cell.row, cell.col) in grid.stack:
             fill = settings.cellFillStack
         elif cell.visited:
             fill = settings.cellFillVisited
@@ -102,7 +105,7 @@ def draw(screen, settings, grid):
     # different 'layers'. Sprite groups maybe? Want to remove
     # this second loop below
     ####################################################################
-    for cell in grid['cells']:
+    for cell in grid.cells:
         rect = cell.rect
         borders = cell.borders
         borderThickness = settings.borderThickness
@@ -147,7 +150,7 @@ def getIndex(row, col, numRows, numCols):
 
 def getCoordinates(grid, index, numCols):
     """Returns the coordinates of a cell within the grid for a given index"""
-    if index < 0 or index >= len(grid['cells']): return False
+    if index < 0 or index >= len(grid.cells): return False
     row = int(index / numCols)
     col = index % numCols
     return (row, col)
