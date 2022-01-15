@@ -1,19 +1,22 @@
+import game_functions as gf
+
 class Settings():
     """A class to store game settings"""
 
     def __init__(self):
         """Initialize the game's static settings"""
         # Grid settings
-        self.cellSize = 100
-        self.numRows = 5
-        self.numCols = 5
+        self.cellSize = 20
+        self.numRows = 60
+        self.numCols = 60
+        self.startCell = gf.getIndex(0, 0, self.numRows, self.numCols)
         
         # Cell settings
-        self.cellFillCurrent = (222, 84, 30)
-        self.cellFillStack = (97, 201, 168)  
-        self.cellFillUnvisited = (207, 192, 189)
-        self.cellFillVisited = (35, 87, 137)
-        self.borderColor = (60, 60, 60)
+        self.cellFillCurrent = (155, 41, 21)
+        self.cellFillStack = (233, 180, 76)  
+        self.cellFillUnvisited = (80, 162, 167)
+        self.cellFillVisited = (228, 214, 167)
+        self.borderColor = (28, 17, 10)
         # self.borderThickness = int(self.cellSize / 2)
         self.borderThickness = 2
 

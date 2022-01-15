@@ -18,24 +18,21 @@ def update(dt, settings, grid):
     # While the stack is not empty
     if grid.stack:
         # Pop a cell from the stack and make it a current cell
-        grid.currentCell = grid.stack.pop()
-        (row, col) = grid.currentCell
-        numRows = settings.numRows
-        numCols = settings.numCols
-        index = getIndex(row, col, numRows, numCols)
-        grid.cells[index].visited = True
+        currentCell = grid.stack.pop()
+        grid.currentCell = currentCell
+        currentCell.visited = True
 
         # Find unvisited cell neighbors
         neighbors = []
-        up = getIndex(row - 1, col, numRows, numCols)
-        down = getIndex(row + 1, col, numRows, numCols)
-        left = getIndex(row, col - 1, numRows, numCols)
-        right = getIndex(row, col + 1, numRows, numCols)
+        top = currentCell.neighbors['top']
+        bottom = currentCell.neighbors['bottom']
+        left = currentCell.neighbors['left']
+        right = currentCell.neighbors['right']
 
-        if up and not grid.cells[up].visited:
-            neighbors.append(up)
-        if down and not grid.cells[down].visited:
-            neighbors.append(down)
+        if top and not grid.cells[top].visited:
+            neighbors.append(top)
+        if bottom and not grid.cells[bottom].visited:
+            neighbors.append(bottom)
         if left and not grid.cells[left].visited:
             neighbors.append(left)
         if right and not grid.cells[right].visited:
@@ -45,28 +42,28 @@ def update(dt, settings, grid):
         if len(neighbors) >= 1:
 
             # Push the current cell to the stack
-            grid.stack.append(grid.currentCell)
+            grid.stack.append(currentCell)
             
             # Choose one of the unvisited neighbours
             newIndex = neighbors[rand.randint(0, len(neighbors) - 1)]
+            nextCell = grid.cells[newIndex]
 
             # Remove the wall between the current cell and the chosen cell
-            if newIndex == down:
-                grid.cells[index].borders['bottom'] = False
-                grid.cells[newIndex].borders['top'] = False
-            elif newIndex == up:
-                grid.cells[index].borders['top'] = False
-                grid.cells[newIndex].borders['bottom'] = False
+            if newIndex == bottom:
+                currentCell.borders['bottom'] = False
+                nextCell.borders['top'] = False
+            elif newIndex == top:
+                currentCell.borders['top'] = False
+                nextCell.borders['bottom'] = False
             elif newIndex == right:
-                grid.cells[index].borders['right'] = False
-                grid.cells[newIndex].borders['left'] = False
+                currentCell.borders['right'] = False
+                nextCell.borders['left'] = False
             elif newIndex == left:
-                grid.cells[index].borders['left'] = False
-                grid.cells[newIndex].borders['right'] = False
+                currentCell.borders['left'] = False
+                nextCell.borders['right'] = False
 
-            # Mark the chosen cell as visited and push it to the stack
-            # grid.cells[newIndex].visited = True
-            grid.stack.append(getCoordinates(grid, newIndex, numCols))
+            # Push nextCell to the stack
+            grid.stack.append(nextCell)
 
     
 def draw(screen, settings, grid):
@@ -83,10 +80,10 @@ def draw(screen, settings, grid):
         borderColor = settings.borderColor
         
         # Draw cell
-        if (cell.row, cell.col) == grid.currentCell:
+        if cell is grid.currentCell:
             fill = settings.cellFillCurrent
         elif cell.visited:
-            if (cell.row, cell.col) in grid.stack:
+            if cell in grid.stack:
                 fill = settings.cellFillStack
             else:
                 fill = settings.cellFillVisited
