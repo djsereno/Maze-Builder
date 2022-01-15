@@ -2,7 +2,6 @@
 import sys
 import random as rand
 
- 
 # Import non-standard modules.
 import pygame as pg
 from pygame.locals import *
@@ -12,13 +11,9 @@ def update(dt, settings, grid):
   
     # Go through events that are passed to the script by the window.
     for event in pg.event.get():
-        # We need to handle these events. Initially the only one you'll want to care
-        # about is the QUIT event, because if you don't handle it, your game will crash
-        # whenever someone tries to exit.
         if event.type == QUIT:
-            pg.quit() # Opposite of pygame.init
-            sys.exit() # Not including this line crashes the script on Windows. Possibly
-            # on other operating systems too, but I don't know for sure.
+            pg.quit()
+            sys.exit() # Not including this line crashes the script on Windows.
 
     # While the stack is not empty
     if grid.stack:
@@ -28,30 +23,32 @@ def update(dt, settings, grid):
         numRows = settings.numRows
         numCols = settings.numCols
         index = getIndex(row, col, numRows, numCols)
+        grid.cells[index].visited = True
 
-        options = []
+        # Find unvisited cell neighbors
+        neighbors = []
         up = getIndex(row - 1, col, numRows, numCols)
         down = getIndex(row + 1, col, numRows, numCols)
         left = getIndex(row, col - 1, numRows, numCols)
         right = getIndex(row, col + 1, numRows, numCols)
 
         if up and not grid.cells[up].visited:
-            options.append(up)
+            neighbors.append(up)
         if down and not grid.cells[down].visited:
-            options.append(down)
+            neighbors.append(down)
         if left and not grid.cells[left].visited:
-            options.append(left)
+            neighbors.append(left)
         if right and not grid.cells[right].visited:
-            options.append(right)
+            neighbors.append(right)
         
         # If the current cell has any neighbours which have not been visited 
-        if len(options) >= 1:
+        if len(neighbors) >= 1:
 
             # Push the current cell to the stack
             grid.stack.append(grid.currentCell)
             
             # Choose one of the unvisited neighbours
-            newIndex = options[rand.randint(0, len(options) - 1)]
+            newIndex = neighbors[rand.randint(0, len(neighbors) - 1)]
 
             # Remove the wall between the current cell and the chosen cell
             if newIndex == down:
@@ -68,7 +65,7 @@ def update(dt, settings, grid):
                 grid.cells[newIndex].borders['right'] = False
 
             # Mark the chosen cell as visited and push it to the stack
-            grid.cells[newIndex].visited = True
+            # grid.cells[newIndex].visited = True
             grid.stack.append(getCoordinates(grid, newIndex, numCols))
 
     
@@ -86,15 +83,13 @@ def draw(screen, settings, grid):
         borderColor = settings.borderColor
         
         # Draw cell
-        ################################################################
-        # Current cell is showing up as green before red. Need to dig into it
-        ################################################################
         if (cell.row, cell.col) == grid.currentCell:
             fill = settings.cellFillCurrent
-        elif (cell.row, cell.col) in grid.stack:
-            fill = settings.cellFillStack
         elif cell.visited:
-            fill = settings.cellFillVisited
+            if (cell.row, cell.col) in grid.stack:
+                fill = settings.cellFillStack
+            else:
+                fill = settings.cellFillVisited
         else:
             fill = settings.cellFillUnvisited
         pg.draw.rect(screen, fill, rect, 0)

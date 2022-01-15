@@ -1,4 +1,6 @@
-# ################# Maze Builder #################
+# ==============
+# MAZE BUILDER
+# ==============
 # Maze generator algorithm using iterative implementation and backtracking method.
 # See 'Iterative Implementation' at https://en.wikipedia.org/wiki/Maze_generation_algorithm
 
@@ -18,7 +20,7 @@ def runPyGame():
     pg.init()
 
     # Set up the clock. This will tick every frame and thus maintain a relatively constant framerate. Hopefully.
-    fps = 5.0
+    fps = 1.0
     fpsClock = pg.time.Clock()
 
     # Create settings
@@ -37,13 +39,13 @@ def runPyGame():
             grid.cells.append(cell)
     
     # Choose the initial cell, mark it as visited and push it to the stack
-    grid.cells[0].visited = True
+    # grid.cells[0].visited = True
     grid.stack.append((0, 0))
 
     # Main game loop.
     dt = 1/fps # dt is the time since last frame.
-    while True: # Loop forever!
-        gf.update(dt, settings, grid) # You can update/draw here, I've just moved the code for neatness.
+    while True:
+        gf.update(dt, settings, grid)
         gf.draw(screen, settings, grid)
 
         dt = fpsClock.tick(fps)

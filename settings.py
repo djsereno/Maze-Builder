@@ -4,9 +4,9 @@ class Settings():
     def __init__(self):
         """Initialize the game's static settings"""
         # Grid settings
-        self.cellSize = 20
-        self.numRows = 60
-        self.numCols = 60
+        self.cellSize = 100
+        self.numRows = 5
+        self.numCols = 5
         
         # Cell settings
         self.cellFillCurrent = (222, 84, 30)

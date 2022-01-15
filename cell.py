@@ -1,4 +1,5 @@
 import pygame as pg
+import game_functions as gf
 
 class Cell():
     """A class to represent the grid cells within the maze"""
@@ -8,6 +9,7 @@ class Cell():
         self.size = settings.cellSize
         self.row = row
         self.col = col
+        self.index = gf.getIndex(row, col, settings.numRows, settings.numCols)
         self.visited = False
         self.borders = {'top': True , 
                         'bottom' : True , 
