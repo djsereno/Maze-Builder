@@ -5,6 +5,7 @@ import random as rand
 # Import non-standard modules.
 import pygame as pg
 from pygame.locals import *
+from numpy import *
 
 
 def checkEvents():
@@ -24,6 +25,7 @@ def update(grid):
     if grid.stack:
         # Pop a cell from the stack and make it a current cell
         currentCell = grid.stack.pop()
+        grid.currentPath.pop()
         grid.currentCell = currentCell
         currentCell.visited = True
 
@@ -48,6 +50,9 @@ def update(grid):
 
             # Push the current cell to the stack
             grid.stack.append(currentCell)
+            grid.currentPath.append(currentCell.index)
+            if len(grid.currentPath) > len(grid.longestPath):
+                grid.longestPath = array(grid.currentPath).copy().tolist()
 
             # Choose one of the unvisited neighbours
             newIndex = neighbors[rand.randint(0, len(neighbors) - 1)]
@@ -69,6 +74,7 @@ def update(grid):
 
             # Push nextCell to the stack
             grid.stack.append(nextCell)
+            grid.currentPath.append(nextCell.index)
 
 
 def draw(screen, settings, grid):
@@ -84,15 +90,22 @@ def draw(screen, settings, grid):
         borderColor = settings.borderColor
 
         # Draw cell
-        if cell is grid.currentCell:
-            fill = settings.cellFillCurrent
-        elif cell.visited:
-            if cell in grid.stack:
+        if grid.stack:
+            if cell is grid.currentCell:
+                fill = settings.cellFillCurrent
+            elif cell.visited:
+                if cell in grid.stack:
+                    fill = settings.cellFillStack
+                else:
+                    fill = settings.cellFillVisited
+            else:
+                fill = settings.cellFillUnvisited
+        else:
+            if cell.index in grid.longestPath:
                 fill = settings.cellFillStack
             else:
                 fill = settings.cellFillVisited
-        else:
-            fill = settings.cellFillUnvisited
+
         pg.draw.rect(screen, fill, rect, 0)
 
     ####################################################################

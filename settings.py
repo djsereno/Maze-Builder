@@ -7,11 +7,11 @@ class Settings():
     def __init__(self):
         """Initialize the game's static settings"""
         # Grid settings
-        self.animate = True
+        self.animate = False
         self.hedgeMode = False
-        self.cellSize = 30
-        self.numRows = 10
-        self.numCols = 10
+        self.cellSize = 10
+        self.numRows = 80
+        self.numCols = 80
         self.startCell = gf.getIndex(0, 0, self.numRows, self.numCols)
 
         # Cell settings

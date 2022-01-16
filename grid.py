@@ -5,3 +5,5 @@ class Grid():
         self.cells = []
         self.stack = []
         self.currentCell = None
+        self.currentPath = []
+        self.longestPath = []

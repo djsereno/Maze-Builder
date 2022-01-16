@@ -46,6 +46,7 @@ def runPyGame():
 
     # Choose the initial cell, mark it as visited and push it to the stack
     grid.stack.append(grid.cells[settings.startCell])
+    grid.currentPath.append(grid.cells[settings.startCell].index)
 
     # Main game loop.
     dt = 1 / fps  # dt is the time since last frame.
