@@ -14,11 +14,12 @@ import sys
 
 # Import non-standard modules.
 import pygame as pg
-from pygame.locals import * 
+from pygame.locals import *
 from cell import Cell
 from grid import Grid
 import game_functions as gf
 from settings import Settings
+
 
 def runPyGame():
     # Initialise PyGame.
@@ -42,16 +43,24 @@ def runPyGame():
         for col in range(settings.numCols):
             cell = Cell(settings, row, col)
             grid.cells.append(cell)
-    
+
     # Choose the initial cell, mark it as visited and push it to the stack
     grid.stack.append(grid.cells[settings.startCell])
 
     # Main game loop.
-    dt = 1/fps # dt is the time since last frame.
+    dt = 1 / fps  # dt is the time since last frame.
     while True:
-        gf.update(dt, settings, grid)
+        gf.checkEvents()
+
+        if settings.animate:
+            gf.update(grid)
+        else:
+            while grid.stack:
+                gf.update(grid)
+
         gf.draw(screen, settings, grid)
 
         dt = fpsClock.tick(fps)
+
 
 runPyGame()
