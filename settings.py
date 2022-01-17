@@ -6,16 +6,22 @@ class Settings():
 
     def __init__(self):
         """Initialize the game's static settings"""
-        # Grid settings
-        self.animate = False
+        # Visual settings
+        self.animate = True
+        self.showSolution = True
+        self.animateSolution = True
         self.hedgeMode = False
-        self.cellSize = 10
-        self.numRows = 80
-        self.numCols = 80
+
+        # Grid settings
+        self.cellSize = 30
+        self.numRows = 20
+        self.numCols = 20
         self.startCell = gf.getIndex(0, 0, self.numRows, self.numCols)
 
         # Cell settings
         self.cellFillCurrent = (155, 41, 21)
+        self.cellFillStart = (105, 122, 33)
+        self.cellFillEnd = (155, 41, 21)
         self.cellFillStack = (233, 180, 76)
         self.cellFillUnvisited = (80, 162, 167)
         self.cellFillVisited = (228, 214, 167)

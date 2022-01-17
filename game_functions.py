@@ -1,11 +1,11 @@
 # Import standard modules.
 import sys
 import random as rand
+import copy
 
 # Import non-standard modules.
 import pygame as pg
 from pygame.locals import *
-from numpy import *
 
 
 def checkEvents():
@@ -25,7 +25,6 @@ def update(grid):
     if grid.stack:
         # Pop a cell from the stack and make it a current cell
         currentCell = grid.stack.pop()
-        grid.currentPath.pop()
         grid.currentCell = currentCell
         currentCell.visited = True
 
@@ -49,10 +48,7 @@ def update(grid):
         if neighbors:
 
             # Push the current cell to the stack
-            grid.stack.append(currentCell)
-            grid.currentPath.append(currentCell.index)
-            if len(grid.currentPath) > len(grid.longestPath):
-                grid.longestPath = array(grid.currentPath).copy().tolist()
+            grid.addToStack(currentCell)
 
             # Choose one of the unvisited neighbours
             newIndex = neighbors[rand.randint(0, len(neighbors) - 1)]
@@ -73,8 +69,16 @@ def update(grid):
                 nextCell.borders['right'] = False
 
             # Push nextCell to the stack
-            grid.stack.append(nextCell)
-            grid.currentPath.append(nextCell.index)
+            grid.addToStack(nextCell)
+
+        # No neighbors. Check if stack was the longest path
+        elif len(grid.stack) + 1 == grid.maxPathLength:
+            grid.maxPath = copy.copy(grid.stack)
+            grid.maxPath.append(currentCell)
+            grid.endCell = currentCell
+
+        if len(grid.stack) == 0:
+            grid.complete = True
 
 
 def draw(screen, settings, grid):
@@ -89,8 +93,12 @@ def draw(screen, settings, grid):
         borderThickness = settings.borderThickness
         borderColor = settings.borderColor
 
-        # Draw cell
-        if grid.stack:
+        # Always draw start cell
+        if cell.index == settings.startCell:
+            fill = settings.cellFillStart
+
+        # During maze creation
+        elif not grid.complete:
             if cell is grid.currentCell:
                 fill = settings.cellFillCurrent
             elif cell.visited:
@@ -100,13 +108,31 @@ def draw(screen, settings, grid):
                     fill = settings.cellFillVisited
             else:
                 fill = settings.cellFillUnvisited
+
+        # After maze creation
         else:
-            if cell.index in grid.longestPath:
-                fill = settings.cellFillStack
+            if cell is grid.endCell:
+                fill = settings.cellFillEnd
+            elif settings.showSolution:
+                if settings.animateSolution:
+                    if cell is grid.maxPath[grid.animatedCellIndex]:
+                        fill = settings.cellFillStack
+                    else:
+                        fill = settings.cellFillVisited
+                else:
+                    if cell in grid.maxPath:
+                        fill = settings.cellFillStack
+                    else:
+                        fill = settings.cellFillVisited
             else:
                 fill = settings.cellFillVisited
 
         pg.draw.rect(screen, fill, rect, 0)
+
+    # Update the animated solution cell to display
+    if grid.complete and settings.animateSolution:
+        grid.animatedCellIndex = (grid.animatedCellIndex + 1) % len(
+            grid.maxPath)
 
     ####################################################################
     # For lines to look good, need to draw rects first
