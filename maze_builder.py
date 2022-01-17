@@ -5,7 +5,6 @@
 # See 'Iterative Implementation' at https://en.wikipedia.org/wiki/Maze_generation_algorithm
 # ==============
 # Future updates or improvements:
-# - Keep track of longest path and display once complete
 # - Allow user to draw obstacles prior to maze generation
 # - Allow user to define an end point
 
@@ -45,19 +44,19 @@ def runPyGame():
             grid.cells.append(cell)
 
     # Choose the initial cell, mark it as visited and push it to the stack
-    grid.stack.append(grid.cells[settings.startCell])
-    grid.currentPath.append(grid.cells[settings.startCell].index)
+    grid.addToStack(grid.cells[settings.startCell])
 
     # Main game loop.
     dt = 1 / fps  # dt is the time since last frame.
     while True:
         gf.checkEvents()
 
-        if settings.animate:
-            gf.update(grid)
-        else:
-            while grid.stack:
+        if not grid.complete:
+            if settings.animate:
                 gf.update(grid)
+            else:
+                while grid.stack:
+                    gf.update(grid)
 
         gf.draw(screen, settings, grid)
 
