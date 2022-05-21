@@ -46,14 +46,14 @@
 
 This algorithm, also known as the "[recursive backtracker](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search)" algorithm, is a randomized version of the depth-first search algorithm. Consider the space for a maze being a large grid of cells (like a large chess board), each cell starting with four walls. 
 
-1. Starting from a random cell, select a random neighboring cell that has not yet been visited. 
+1. Starting from an initial cell, select a random neighboring cell that has not yet been visited. 
 2. Remove the wall between the two cells and mark the new cell as visited.
 3. Add the new cell to the stack to facilitate backtracking. 
 4. Continue this process until the current cell has no unvisited neighbors (i.e. a dead-end). 
-5. When at a dead-end, backtrack through the path until reaching a cell with an unvisited neighbor. 
-6. Visit the unvisited cell, and continue until every cell has been visited.
+5. When a dead-end has been reached, backtrack through the path until reaching a cell with an unvisited neighbor. 
+6. Visit the unvisited neighbor, and repeat steps 2 through 5 until every cell has been visited.
 
-Whichever cell results in the longest path from the starting cell is saved as the 'end cell' or 'target cell' of the maze, and the associated path to reach that cell is saved as the solution to the maze.
+The cell which results in the longest path from the initial cell is saved as the 'end cell' or 'target cell', and the associated path to reach that cell is saved as the solution to the maze.
 
 Mazes generated with a depth-first search have a low branching factor and contain many long corridors because the algorithm explores as far as possible along each branch before backtracking. 
 
@@ -70,7 +70,7 @@ Mazes generated with a depth-first search have a low branching factor and contai
 
 ## Usage
 
-In `settings.py`, there are several settings that control the bahvior of the maze builder.
+In `settings.py`, there are several settings that control the behavior of the maze builder.
 
 ### Visual Settings
 * **animate**: 
@@ -88,14 +88,14 @@ In `settings.py`, there are several settings that control the bahvior of the maz
 </div>
 
 * **animateSolution**:
-    * `True`: Animate the solution path. Note: Only applicable if `self.showSolution` is `True`.
+    * `True`: Animate the solution path. Note: Only applicable if `showSolution` is `True`.
     * `False`: Display a static solution path.
 <div align="center">
     <img src="images/animatesolution.gif" alt="Animated Solution" width="200">
 </div>
 
 * **hedgeMode**:
-    * `True`: Mazes with 'hedge mode' enabled have maze walls that are the same thickness as the maze path, similar to a hedge maze or corn maze. 
+    * `True`: Mazes with 'hedge mode' enabled have walls that are the same thickness as the maze path, similar to a hedge maze or corn maze. 
     * `False`: Thin lines separate maze paths.
 <div align="center">
     <img src="images/hedgemode.png" alt="Hedge Mode" width="200">
