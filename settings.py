@@ -14,8 +14,8 @@ class Settings():
 
         # Grid settings
         self.cellSize = 30
-        self.numRows = 20
-        self.numCols = 20
+        self.numRows = 15
+        self.numCols = 15
         self.startCell = gf.getIndex(0, 0, self.numRows, self.numCols)
 
         # Cell settings
