@@ -74,29 +74,29 @@ In `settings.py`, there are several settings that control the behavior of the ma
 
 ### Visual Settings
 * **animate**: 
-    * `True`: Animate the maze builder, extending the maze path by one cell per frame. 
     * `False`: Only the final maze will be displayed.
+    * `True`: Animate the maze builder, extending the maze path by one cell per frame. 
 <div align="center">
     <img src="images/mazebuilder.gif" alt="Animated Maze" width="200">
 </div>
 
 * **showSolution**:
-    * `True`: Show the solution path from maze start to end once the maze has been generated. 
     * `False`: No solution displayed.
+    * `True`: Show the solution path from maze start to end once the maze has been generated. 
 <div align="center">
     <img src="images/solution.png" alt="Show Solution" width="200">
 </div>
 
 * **animateSolution**:
-    * `True`: Animate the solution path. Note: Only applicable if `showSolution` is `True`.
     * `False`: Display a static solution path.
+    * `True`: Animate the solution path. Note: Only applicable if `showSolution` is `True`.
 <div align="center">
     <img src="images/animatesolution.gif" alt="Animated Solution" width="200">
 </div>
 
 * **hedgeMode**:
-    * `True`: Mazes with 'hedge mode' enabled have walls that are the same thickness as the maze path, similar to a hedge maze or corn maze. 
     * `False`: Thin lines separate maze paths.
+    * `True`: Mazes with 'hedge mode' enabled have walls that are the same thickness as the maze path, similar to a hedge maze or corn maze. 
 <div align="center">
     <img src="images/hedgemode.png" alt="Hedge Mode" width="200">
 </div>
