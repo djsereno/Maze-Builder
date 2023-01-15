@@ -36,7 +36,7 @@
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#references">References</a></li>
   </ol>
 </details>
 
@@ -158,7 +158,7 @@ Project Link: [https://github.com/djsereno/Maze-Builder](https://github.com/djse
 
 <!-- ACKNOWLEDGMENTS -->
 
-## Acknowledgments
+## References
 
 - [Maze generation algorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search) from [Wikipedia](https://en.wikipedia.org)
 
